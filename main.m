@@ -17,7 +17,7 @@ run p_determine_ROIs.m
 
 %% Loading Odor sets into memory
 
-fprintf('<!> Loading datasets ...\n')
+fprintf('<!> Running datasets ...\n')
 
 for Load2Mem = 1:numel(FilesList)
     
