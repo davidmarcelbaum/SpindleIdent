@@ -76,7 +76,7 @@ for Load2Mem = 1:numel(FilesList)
         
         
         % Get the peak in PSD of spindle frequency range (7 to 16 Hz)
-        run extractFrPeak.m
+        run extractFrPeak_initial.m
         
         
     end

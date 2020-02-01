@@ -1,6 +1,17 @@
 if ~exist('FileTemp', 'var')
     
-    FileTemp = load(FilesList(1).name);
+    try
+        FileTemp = load(FilesList(1).name);
+        
+    catch ME
+        
+        if strcmp(ME.message, 'Undefined variable "FilesList" or class "FilesList".')
+        
+            FileTemp = load(FilesListPlacebo(1).name);
+            
+        end
+            
+    end
     
 end
 

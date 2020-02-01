@@ -9,9 +9,9 @@ params.sepSpin = 11;
 
 
 % For every channel, save frequency peaks
-sizeWindow  = 5000;
-dataOn      = squeeze(Data_SS(:,5001:15000,:));
-dataOff     = squeeze(Data_SS(:,15001:25000,:));
+sizeWindow  = 500;
+dataOn      = squeeze(Data_SS(:,501:1500,:));
+dataOff     = squeeze(Data_SS(:,1501:2500,:));
 
 
 %% ----- For total Spindle range -----
