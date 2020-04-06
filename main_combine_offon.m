@@ -5,11 +5,11 @@ if ~exist('pathData','var') || size(pathData,2) < 3
     pathData = [uigetdir(cd,...
         'Locate folder of CHANNEL datasets'), filesep];
     addpath(pathData)
-    FilesListPlacebo = dir([pathData,'*Placebo*']);
-    FilesListOdor = dir([pathData,'*Odor*']);
+    FilesListSham = dir([pathData,'*Sham*']);
+    FilesListCue = dir([pathData,'*Cue*']);
     
     
-    if numel(FilesListPlacebo) ~= numel(FilesListOdor)
+    if numel(FilesListSham) ~= numel(FilesListCue)
         
         error('Mismatch in number of datasets')
         
@@ -28,32 +28,35 @@ run p_determine_ROIs.m
 
 fprintf('<!> Running datasets ...\n')
 
-for Load2Mem = 1:numel(FilesListPlacebo)
+for Load2Mem = 1:numel(FilesListSham)
     
     
     str_subj = ...
-        extractBefore(FilesListPlacebo(Load2Mem).name, '_Placebo');
+        extractBefore(FilesListSham(Load2Mem).name, '_Sham');
+    
+    str_triggers = extractBetween(FilesListSham(Load2Mem).name, ...
+        'Sham_', '.mat');
     
     
     fprintf('<!> subject %s (%d/%d)\n', ...
-        str_subj, Load2Mem, numel(FilesListPlacebo));
+        str_subj, Load2Mem, numel(FilesListSham));
         
     
-    tmp_data_Placebo = load([pathData FilesListPlacebo(Load2Mem).name]);
-    tmp_data_Odor = load([pathData FilesListOdor(Load2Mem).name]);
+    tmp_data_Sham = load([pathData FilesListSham(Load2Mem).name]);
+    tmp_data_Cue = load([pathData FilesListCue(Load2Mem).name]);
     
     
     try
         
-        tmp_data_Placebo = tmp_data_Placebo.Channel;
-        tmp_data_Odor = tmp_data_Odor.Channel;
+        tmp_data_Sham = tmp_data_Sham.Channel;
+        tmp_data_Cue = tmp_data_Cue.Channel;
         
     catch ME
         
         if strcmp(ME.message, "Reference to non-existent field 'Channel'.")
             
-            tmp_data_Placebo = tmp_data_Placebo;
-            tmp_data_Odor = tmp_data_Odor;
+            tmp_data_Sham = tmp_data_Sham;
+            tmp_data_Cue = tmp_data_Cue;
             
         end
         
@@ -65,38 +68,38 @@ for Load2Mem = 1:numel(FilesListPlacebo)
         
         subjectPSD.Ori = pathData;
         subjectPSD.str_SS = str_SS_all;
-        subjectPSD.Srate = tmp_data_Placebo.Srate;
-        subjectPSD.Times = tmp_data_Placebo.Times;
-        subjectPSD.TrialEnd = tmp_data_Placebo.TrialEnd;
-        subjectPSD.TrialStart = tmp_data_Placebo.TrialStart;
+        subjectPSD.Srate = tmp_data_Sham.Srate;
+        subjectPSD.Times = tmp_data_Sham.Times;
+        subjectPSD.TrialEnd = tmp_data_Sham.TrialEnd;
+        subjectPSD.TrialStart = tmp_data_Sham.TrialStart;
         
     end
     
     
-    v_ROI_SS = find(strcmp(tmp_data_Placebo.Labels(:,:),indx_SS));
+    v_ROI_SS = find(strcmp(tmp_data_Sham.Labels(:,:), idx_SS));
     
-    subjectPSD.(str_subj).Placebo.Data = tmp_data_Placebo.Data(indx_SS,:,:);
-    subjectPSD.(str_subj).Odor.Data = tmp_data_Odor.Data(indx_SS,:,:);
+    subjectPSD.(str_subj).Sham.Data = tmp_data_Sham.Data(idx_SS,:,:);
+    subjectPSD.(str_subj).Cue.Data = tmp_data_Cue.Data(idx_SS,:,:);
     
     
     clear tmp_data
     
     
-    if size(subjectPSD.(str_subj).Placebo.Data, 3) > ...
-            size(subjectPSD.(str_subj).Odor.Data, 3)
+    if size(subjectPSD.(str_subj).Sham.Data, 3) > ...
+            size(subjectPSD.(str_subj).Cue.Data, 3)
         
-        subjectPSD.(str_subj).Placebo.Data = ...
-            subjectPSD.(str_subj).Placebo.Data(:,:, ...
-            1:size(subjectPSD.(str_subj).Odor.Data,3));
+        subjectPSD.(str_subj).Sham.Data = ...
+            subjectPSD.(str_subj).Sham.Data(:,:, ...
+            1:size(subjectPSD.(str_subj).Cue.Data,3));
         
         warning('Removed Placebo trials')
         
-    elseif size(subjectPSD.(str_subj).Placebo.Data, 3) < ...
-            size(subjectPSD.(str_subj).Odor.Data, 3)
+    elseif size(subjectPSD.(str_subj).Sham.Data, 3) < ...
+            size(subjectPSD.(str_subj).Cue.Data, 3)
         
-        subjectPSD.(str_subj).Odor.Data = ...
-            subjectPSD.(str_subj).Odor.Data(:,:, ...
-            1:size(subjectPSD.(str_subj).Placebo.Data,3));
+        subjectPSD.(str_subj).Cue.Data = ...
+            subjectPSD.(str_subj).Cue.Data(:,:, ...
+            1:size(subjectPSD.(str_subj).Sham.Data,3));
         
         warning('Removed Odor trials')
         
@@ -104,17 +107,17 @@ for Load2Mem = 1:numel(FilesListPlacebo)
     
     
     
-    for s_SS = 1:numel(indx_SS)
+    for s_SS = 1:numel(idx_SS)
         
         
         str_SS = char(subjectPSD.str_SS(s_SS));
         
-        Data_SS_Placebo = subjectPSD.(str_subj).Placebo.Data(s_SS,:,:);
-        Data_SS_Odor = subjectPSD.(str_subj).Odor.Data(s_SS,:,:);
+        Data_SS_Sham = subjectPSD.(str_subj).Sham.Data(s_SS,:,:);
+        Data_SS_Cue = subjectPSD.(str_subj).Cue.Data(s_SS,:,:);
         
         
         
-        Data_SS = [Data_SS_Placebo, Data_SS_Odor];
+        Data_SS = [Data_SS_Sham, Data_SS_Cue];
         
         
         % Get the peak in PSD of spindle frequency range (7 to 16 Hz)
@@ -123,8 +126,8 @@ for Load2Mem = 1:numel(FilesListPlacebo)
         
     end
     
-    subjectPSD.(str_subj).Placebo = rmfield(subjectPSD.(str_subj).Placebo, 'Data');
-    subjectPSD.(str_subj).Odor = rmfield(subjectPSD.(str_subj).Odor, 'Data');
+    subjectPSD.(str_subj).Sham = rmfield(subjectPSD.(str_subj).Sham, 'Data');
+    subjectPSD.(str_subj).Cue = rmfield(subjectPSD.(str_subj).Cue, 'Data');
    
 
 end

@@ -11,12 +11,22 @@ params.sepSpin = 11;
 % For every channel, save frequency peaks
 sizeWindow  = 500;
 
-data_postCue      = ...
-    [Data_SS(:, size(Data_SS,2) / 2 + 15 * subjectPSD.Srate + 1 : size(Data_SS,2) ,:), ...
-    Data_SS(:, 1:size(Data_SS,2)/2 - 15*subjectPSD.Srate ,:)];
-
-data_postSham      = ...
-    Data_SS(:, 15 * subjectPSD.Srate + 1 : size(Data_SS,2) / 2 + 15 * subjectPSD.Srate ,:);
+if strcmp(str_triggers, 'switchedOFF_switchedON')
+    
+    data_postCue  = ...
+        [Data_SS(:, size(Data_SS,2) / 2 + 15 * subjectPSD.Srate + 1 : size(Data_SS,2), :), ...
+        Data_SS(:, 1:size(Data_SS,2)/2 - 15 * subjectPSD.Srate, :)];
+    
+    data_postSham = ...
+        Data_SS(:, 15 * subjectPSD.Srate + 1 : size(Data_SS,2) / 2 + 15 * subjectPSD.Srate, :);
+    
+elseif strcmp(str_triggers, 'switchedON_switchedOFF')
+    
+    data_postCue  = Data_SS(:, size(Data_SS,2) / 2 + 1 : size(Data_SS,2), :);
+    
+    data_postSham = Data_SS(:, 1 : size(Data_SS,2) / 2, :);
+    
+end
 
 data_postCue      = squeeze(data_postCue(:,1:end,:));
 data_postSham     = squeeze(data_postSham(:,1:end,:));

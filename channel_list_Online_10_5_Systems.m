@@ -1,5 +1,15 @@
+% |===USER INPUT===|
+chan_Mastoids       = {'E57', 'E100'};
+chan_EOG            = {'E8', 'E14', 'E21', 'E25', 'E126', 'E127'};
+chan_EMG            = {'E43', 'E120'};
+chan_VREF           = {'E129'};
+chan_Face           = {'E49', 'E48', 'E17', 'E128', 'E32', 'E1', ...
+                        'E125', 'E119', 'E113'};
+% |=END USER INPUT=| 
+
+
 % [    1,    2,    3,    4,    5,    6,    7,    8,    9,   10,   11,   12,   13,   14,   15,   16,   17,   18,   19,   20, 
-A={ 'E1','NaN','NaN','NaN','NaN','NaN','NaN','NaN','Fp2','NaN','Fz','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN'};
+A={ 'E1','NaN','NaN','NaN','NaN','NaN','NaN','NaN','Fp2','NaN', 'Fz','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN'};
 
 %     21,   22,   23,   24,   25,   26,   27,   28,   29,   30,   31,   32,   33,   34,   35,   36,   37,   38,   39,   40, 
 B={'NaN', 'Fp1','NaN','F3','NaN','NaN','NaN','NaN','NaN','NaN','E31','NaN', 'F7','NaN','NaN', 'C3','E37','NaN','NaN','NaN'};
@@ -23,6 +33,23 @@ c_chans = [A, B, C, D, E, F, G];
 
 clear A B C D E F G
 
-get_chans = find(~strcmp(c_chans,'NaN'));
+c_chan_generic = cell(numel(c_chans), 1);
+for s_chan = 1 : numel(c_chans)
+    c_chan_generic(s_chan) = {strcat('E', num2str(s_chan))};
+end
 
-get_names = c_chans(~strcmp(c_chans,'NaN'));
+chans2Rej   = [chan_Mastoids, chan_EOG, chan_EMG, chan_Face, chan_VREF];
+
+for i = 1 : numel(chans2Rej)
+    s_found = find(strcmp( ...
+        c_chan_generic, char(chans2Rej(i))));
+    
+    if ~isempty(s_found)
+        idx_rej(i) = s_found;
+    end
+end
+
+get_chans = find(~strcmp(c_chans,'NaN'));
+get_chans(ismember(get_chans,idx_rej)) = [];
+
+get_names = c_chans(get_chans);

@@ -7,7 +7,7 @@ if ~exist('FileTemp', 'var')
         
         if strcmp(ME.message, 'Undefined variable "FilesList" or class "FilesList".')
         
-            FileTemp = load(FilesListPlacebo(1).name);
+            FileTemp = load(FilesListSham(1).name);
             
         end
             
@@ -35,12 +35,8 @@ end
 %     'SelectionMode','multiple','ListSize',[400 400],...
 %     'ListString',Sources(:,1));
 
-%% Get channels
-run channel_list.m
+%% Get channels by strings and position in data
+run channel_list_128_Channel_HCGSN58
 
-% indx_SO = get_chans;
-indx_SS = get_chans;
-
-% Get strings
-% str_SO_all = Sources(indx_SO);
-str_SS_all = Sources(indx_SS);
+str_SS_all = Sources(ismember(Sources, get_names_generic));
+idx_SS = find(ismember(Sources, get_names_generic));
