@@ -92,7 +92,7 @@ for Load2Mem = 1:numel(FilesListSham)
             subjectPSD.(str_subj).Sham.Data(:,:, ...
             1:size(subjectPSD.(str_subj).Cue.Data,3));
         
-        warning('Removed Placebo trials')
+        warning('Removed Sham trials')
         
     elseif size(subjectPSD.(str_subj).Sham.Data, 3) < ...
             size(subjectPSD.(str_subj).Cue.Data, 3)
@@ -101,7 +101,7 @@ for Load2Mem = 1:numel(FilesListSham)
             subjectPSD.(str_subj).Cue.Data(:,:, ...
             1:size(subjectPSD.(str_subj).Sham.Data,3));
         
-        warning('Removed Odor trials')
+        warning('Removed Cue trials')
         
     end
     
