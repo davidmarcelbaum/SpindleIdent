@@ -8,50 +8,56 @@ chan_Face           = {'E49', 'E48', 'E17', 'E128', 'E32', 'E1', ...
 % |=END USER INPUT=| 
 
 
-% [    1,    2,    3,    4,    5,    6,    7,    8,    9,   10,   11,   12,   13,   14,   15,   16,   17,   18,   19,   20, 
-A={ 'E1','NaN','NaN','NaN','NaN','NaN','NaN','NaN','Fp2','NaN', 'Fz','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN'};
-
-%     21,   22,   23,   24,   25,   26,   27,   28,   29,   30,   31,   32,   33,   34,   35,   36,   37,   38,   39,   40, 
-B={'NaN', 'Fp1','NaN','F3','NaN','NaN','NaN','NaN','NaN','NaN','E31','NaN', 'F7','NaN','NaN', 'C3','E37','NaN','NaN','NaN'};
-
-%     41,   42,   43,   44,   45,   46,   47,   48,   49,   50,   51,   52,   53,   54,   55,   56,   57,   58,   59,   60, 
-C={'NaN','NaN','E43','NaN', 'T3','NaN','NaN','NaN','NaN','NaN','NaN', 'P3','E53','E54','E55','NaN', 'LM', 'T5','NaN','E60'};
-
-%     61,   62,   63,   64,   65,   66,   67,   68,   69,   70,   71,   72,   73,   74,   75,   76,   77,   78,   79,   80, 
-D={'E61', 'Pz','NaN','NaN','NaN','NaN','E67','NaN','NaN', 'O1','NaN','E72','NaN','NaN', 'Oz','NaN','E77','E78','E79','E80'};
-
-%     81,   82,   83,   84,   85,   86,   87,   88,   89,   90,   91,   92,   93,   94,   95,   96,   97,   98,   99,  100,
-E={'NaN','NaN', 'O2','NaN','E85','E86','E87','NaN','NaN','NaN','NaN', 'P4','NaN','NaN','NaN', 'T6','NaN','NaN','NaN', 'RM'};
-
-%    101,  102,  103,  104,  105,  106,  107,  108,  109,  110,  111,  112,  113,  114,  115,  116,  117,  118,  119,  120,
-F={'NaN','NaN','NaN', 'C4','NaN','NaN','NaN', 'T4','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN'};
-
-%    121,  122,  123,  124,  125,  126,  127,  128]
-G={'NaN', 'F8','NaN', 'F4','NaN','NaN','NaN','NaN'};
+%% From PDF HCGSN58 128 channel system list
+c_chans = {...
+    'C3',   'C4',   'Cz',   'F3',   'F4',   'F7',   'F8',   'FP1',  ...
+    'FP2',  'FPZ',  'FPZ',  'FPZ',  'FZ',   'O1',   'O2',   'P3',   ...
+    'P4',   'T5-P7','T6-P8','AF3',  'AF4',  'AF7',  'AF8',  'AFZ',  ...
+    'C1',   'C2',   'C5',   'C6',   'CP1',  'CP2',  'CP3',  'CP4',  ...
+    'CP5',  'CP6',  'CPZ',  'F1',   'F10',  'F2',   'F5',   'F6',   ...
+    'F9',   'FC1',  'FC2',  'FC3',  'FC4',  'FC5',  'FC6',  'FCZ',  ...
+    'FT10', 'FT7',  'FT8',  'FT9',  'Oz',   'P1',   'P10',  'P2',   ...
+    'P5',   'P6',   'P9',   'PO3',  'PO4',  'PO7',  'PO8',  'POZ',  ...
+    'PZ',   'T10',  'T11',  'T12',  'T9',   'TP10', 'TP7',  'TP8',  ...
+    'TP9'};
 
 
-c_chans = [A, B, C, D, E, F, G];
+chanNum_HCGSN = [...
+    36;     104;    129;    24;     124;    33;     122;    22;     ...
+    9;      14;     21;     15;     11;     70;     83;     52;     ...
+    92;     58;     96;     23;     3;      26;     2;      16;     ...
+    30;     105;    41;     103;    37;     87;     42;     93;     ...
+    47;     98;     55;     19;     1;      4;      27;     123;    ...
+    32;     13;     112;    29;     111;    28;     117;    6;      ...
+    121;    34;     116;    38;     75;     60;     95;     85;     ...
+    51;     97;     64;     67;     77;     65;     90;     72;     ...
+    62;     114;    45;     108;    44;     100;    46;     102;    ...
+    57]';
 
-clear A B C D E F G
 
-c_chans_generic = cell(numel(c_chans), 1);
-for s_chan = 1 : numel(c_chans)
-    c_chans_generic(s_chan) = {strcat('E', num2str(s_chan))};
-end
+%% Eliminate channels
+chans2del   = str2double(extractAfter(...
+    [chan_Mastoids, chan_EOG, chan_EMG, chan_VREF, chan_Face], 'E'));
 
-chans2Rej   = [chan_Mastoids, chan_EOG, chan_EMG, chan_Face, chan_VREF];
-
-for i = 1 : numel(chans2Rej)
-    s_found = find(strcmp( ...
-        c_chans_generic, char(chans2Rej(i))));
+pos2del     = find(ismember(chans2del, chanNum_HCGSN));
+for i_del = numel(pos2del) : -1 : 1
     
-    if ~isempty(s_found)
-        idx_rej(i) = s_found;
-    end
+    idx_del                 = find(...
+        chanNum_HCGSN == chans2del(pos2del(i_del)));
+    chanNum_HCGSN(idx_del)  = [];
+    c_chans(idx_del)        = [];
+    
 end
 
-get_chans                               = find(~strcmp(c_chans,'NaN'));
-get_chans(ismember(get_chans,idx_rej))  = [];
 
-get_names                               = c_chans(get_chans);
-get_names_generic                       = c_chans_generic(get_chans);
+%% Bring the channel label sequency in order based on sorting chanNum_HCGSN
+chansOrdered = sort(chanNum_HCGSN);
+for i_chan = 1 : numel(chansOrdered)
+   
+    pos_chan                = find(chanNum_HCGSN == chansOrdered(i_chan));
+    c_chansOrdered(i_chan)  = c_chans(pos_chan);
+    
+end
+
+get_names_generic   = strcat('E', string(num2cell(chansOrdered)));
+get_names           = c_chansOrdered;

@@ -1,18 +1,14 @@
 if ~exist('FileTemp', 'var')
-    
     try
         FileTemp = load(FilesList(1).name);
-        
     catch ME
-        
-        if strcmp(ME.message, 'Undefined variable "FilesList" or class "FilesList".')
-        
+        if strcmp(ME.message, ...
+                'Undefined variable "FilesList" or class "FilesList".') ...
+                || strcmp(ME.message, ...
+                "Undefined function 'FilesList' for input arguments of type 'double'.")
             FileTemp = load(FilesListSham(1).name);
-            
         end
-            
     end
-    
 end
 
 try
