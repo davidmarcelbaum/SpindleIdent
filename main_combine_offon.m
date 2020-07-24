@@ -91,7 +91,6 @@ for Load2Mem = 1:numel(FilesListSham)
         
         Data_SS = [Data_SS_Sham, Data_SS_Odor];
         
-        
         % Get the peak in PSD of spindle frequency range (7 to 16 Hz)
         run extractFrPeak_combined.m
         
@@ -106,10 +105,4 @@ clear data_struct
 
 whos
 save([pathData, 'Subject_PSDPeaks_combined.mat'], 'subjectPSD', '-V7.3')
-    
-    
-    
-    
-    
-    
     

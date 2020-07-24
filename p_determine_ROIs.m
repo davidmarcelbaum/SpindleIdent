@@ -5,7 +5,6 @@ if ~exist('FileTemp', 'var')
     else
         FileTemp = load(FilesListSham(1).name);
     end
-    
 end
 
 try
