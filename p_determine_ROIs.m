@@ -1,16 +1,9 @@
 if ~exist('FileTemp', 'var')
     
-    try
+    if exist('FilesList', 'var')
         FileTemp = load(FilesList(1).name);
-        
-    catch ME
-        
-        if strcmp(ME.message, 'Undefined variable "FilesList" or class "FilesList".')
-        
-            FileTemp = load(FilesListSham(1).name);
-            
-        end
-            
+    else
+        FileTemp = load(FilesListSham(1).name);
     end
     
 end
@@ -36,7 +29,7 @@ end
 %     'ListString',Sources(:,1));
 
 %% Get channels by strings and position in data
-run channel_list_128_Channel_HCGSN58
+run('D:\Gits\EEG_channels\channel_list_128_Channel_HCGSN58.m')
 
 str_SS_all = Sources(ismember(Sources, get_names_generic));
 idx_SS = find(ismember(Sources, get_names_generic));
