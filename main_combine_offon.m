@@ -47,12 +47,12 @@ for Load2Mem = 1:numel(FilesListSham)
     end
     
     if Load2Mem == 1
-        subjectPSD.Ori = pathData;
-        subjectPSD.str_SS = str_SS_all;
-        subjectPSD.Srate = tmp_data_Sham.Srate;
-        subjectPSD.Times = tmp_data_Sham.Times;
-        subjectPSD.TrialEnd = tmp_data_Sham.TrialEnd;
-        subjectPSD.TrialStart = tmp_data_Sham.TrialStart;
+        subjectPSD.Ori          = pathData;
+        subjectPSD.str_SS       = str_SS_all;
+        subjectPSD.Srate        = tmp_data_Sham.Srate;
+        subjectPSD.Times        = tmp_data_Sham.Times;
+        subjectPSD.TrialEnd     = tmp_data_Sham.TrialEnd;
+        subjectPSD.TrialStart   = tmp_data_Sham.TrialStart;
     end
     
     v_ROI_SS = find(strcmp(tmp_data_Sham.Labels(:,:), idx_SS));
@@ -96,8 +96,8 @@ for Load2Mem = 1:numel(FilesListSham)
         
     end
     
-    subjectPSD.(str_subj).Sham = rmfield(subjectPSD.(str_subj).Sham, 'Data');
-    subjectPSD.(str_subj).Odor = rmfield(subjectPSD.(str_subj).Odor, 'Data');
+    subjectPSD.(str_subj) = rmfield(subjectPSD.(str_subj), 'Sham');
+    subjectPSD.(str_subj) = rmfield(subjectPSD.(str_subj), 'Odor');
    
 end
 
