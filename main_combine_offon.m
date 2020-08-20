@@ -16,7 +16,7 @@ end
 
 
 %% Select which areas to compare
-run p_determine_ROIs.m
+run('/home/sleep/Documents/DAVID/GitHub/EEG_channels/p_generic_channels.m')
 
 
 %% Loading Odor sets into memory
@@ -48,17 +48,17 @@ for Load2Mem = 1:numel(FilesListSham)
     
     if Load2Mem == 1
         subjectPSD.Ori          = pathData;
-        subjectPSD.str_SS       = str_SS_all;
+        subjectPSD.str_SS       = ROIs.str_chans;
         subjectPSD.Srate        = tmp_data_Sham.Srate;
         subjectPSD.Times        = tmp_data_Sham.Times;
         subjectPSD.TrialEnd     = tmp_data_Sham.TrialEnd;
         subjectPSD.TrialStart   = tmp_data_Sham.TrialStart;
     end
     
-    v_ROI_SS = find(strcmp(tmp_data_Sham.Labels(:,:), idx_SS));
+    v_ROI_SS = find(ismember(tmp_data_Sham.Labels(:,:), ROIs.str_chans));
     
-    subjectPSD.(str_subj).Sham.Data = tmp_data_Sham.Data(idx_SS,:,:);
-    subjectPSD.(str_subj).Odor.Data = tmp_data_Odor.Data(idx_SS,:,:);
+    subjectPSD.(str_subj).Sham.Data = tmp_data_Sham.Data(v_ROI_SS,:,:);
+    subjectPSD.(str_subj).Odor.Data = tmp_data_Odor.Data(v_ROI_SS,:,:);
     
     clear tmp_data
     
@@ -82,7 +82,7 @@ for Load2Mem = 1:numel(FilesListSham)
         
     end
     
-    for s_SS = 1:numel(idx_SS)
+    for s_SS = 1:numel(ROIs.str_chans)
         
         str_SS = char(subjectPSD.str_SS(s_SS));
         

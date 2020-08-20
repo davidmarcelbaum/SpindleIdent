@@ -8,9 +8,9 @@ if ~exist('FileTemp', 'var')
 end
 
 try
-    Sources = FileTemp.Labels';
+    ROIs.Sources = FileTemp.Labels';
 catch
-    Sources = FileTemp.Channel.Labels;
+    ROIsSources = FileTemp.Channel.Labels;
 end
 % DMB: Soon to be changed: take out "Channel."
 
@@ -28,7 +28,25 @@ end
 %     'ListString',Sources(:,1));
 
 %% Get channels by strings and position in data
-run('D:\Gits\EEG_channels\channel_list_128_Channel_HCGSN58.m')
 
-str_SS_all = Sources(ismember(Sources, get_names_generic));
-idx_SS = find(ismember(Sources, get_names_generic));
+[ROIs.str_chans, ROIs.indx_chans, ROIs.str_chans_real] = ...
+    f_get_HCGSN58_chans(ROIs.Sources, ...
+    '/home/sleep/Documents/DAVID/GitHub/EEG_channels/channel_list_128_Channel_HCGSN58.m');
+
+%% Compute all channels, event hose that don't have cortical namings
+
+ROIs.str_sources = cell(numel(ROIs.Sources), 1);
+
+for i_src = 1:numel(ROIs.str_sources)
+   
+    idx_hasName = find(strcmp(ROIs.str_chans, ROIs.Sources(i_src)));
+    if isempty(idx_hasName)
+        ROIs.str_sources(i_src) = ROIs.Sources(i_src);
+    else
+        ROIs.str_sources(i_src) = ROIs.str_chans_real(idx_hasName);
+    end
+    
+end
+ROIs.str_chans      = ROIs.Sources;
+ROIs.str_chans_real = ROIs.str_sources;
+ROIs.indx_chans     = [1:1:numel(ROIs.str_sources)]';
