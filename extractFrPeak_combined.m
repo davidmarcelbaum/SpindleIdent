@@ -8,75 +8,50 @@ params.edgesSpin = [7, 16];
 params.sepSpin = 11;
 
 
-% For every channel, save frequency peaks
-sizeWindow  = 500;
-
-%% VERIFY:
-%  Why POST-odor vectors and not OdorOn and ShamOn?
-%  Why Sham and Odor separated?
-
 if strcmp(str_triggers, 'switchedOFF_switchedON')
-    
-    data_postOdor  = ...
-        [Data_SS(:, ...
-        size(Data_SS,2) / 2 + 15 * subjectPSD.Srate + 1 : size(Data_SS,2), ...
-        :), ...
-        Data_SS(:, ...
-        1:size(Data_SS,2)/2 - 15 * subjectPSD.Srate, ...
-        :)];
-    
-    data_postSham = ...
-        Data_SS(:, ...
-        15 * subjectPSD.Srate + 1 : size(Data_SS,2) / 2 + 15 * subjectPSD.Srate, ...
-        :);
-    
+    data_Odor  = Data_SS_Odor(...
+        size(Data_SS_Odor,1) / 2 + 1 : size(Data_SS_Odor,1), :);
+    data_Sham = Data_SS_Sham(...
+        size(Data_SS_Sham,1) / 2 + 1 : size(Data_SS_Sham,1), :);
 elseif strcmp(str_triggers, 'switchedON_switchedOFF')
-    
-    data_postOdor = Data_SS(:, ...
-        size(Data_SS,2) / 2 + 1 : size(Data_SS,2), ...
-        :);
-    
-    data_postSham = Data_SS(:, ...
-        1 : size(Data_SS,2) / 2, ...
-        :);
-    
+    data_Odor = Data_SS_Odor(...
+        1 : size(Data_SS_Odor,1) / 2, :);
+    data_Sham = Data_SS_Sham(...
+        1 : size(Data_SS_Sham,1) / 2, :);
 end
 
-data_postOdor      = squeeze(data_postOdor(:,1:end,:));
-data_postSham     = squeeze(data_postSham(:,1:end,:));
 
+%% --- For total Spindle range ---
 
-%% ----- For total Spindle range -----
-
-% ---------- Post-Odor phase ----------
+% ---------- Odor phase ----------
 [subjectPSD.(str_subj).(str_SS).MaxSpindle_Odor] = ...
-    f_get_frPeak(data_postOdor, params, params.edgesSpin(1), params.edgesSpin(2));
+    f_get_frPeak(data_Odor, params, params.edgesSpin(1), params.edgesSpin(2));
 
-% ---------- Post-Sham phase -----------
+% ---------- Sham phase ----------
 [subjectPSD.(str_subj).(str_SS).MaxSpindle_Sham] = ...
-    f_get_frPeak(data_postSham, params, params.edgesSpin(1), params.edgesSpin(2));
+    f_get_frPeak(data_Sham, params, params.edgesSpin(1), params.edgesSpin(2));
 
 
-%% ----- For slow Spindle range -----
+%% --- For slow Spindle range ---
 
-% ---------- Post-Odor phase ----------
+% ---------- Odor phase ---------
 [subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Odor] = ...
-    f_get_frPeak(data_postOdor, params, params.edgesSpin(1), params.sepSpin);
+    f_get_frPeak(data_Odor, params, params.edgesSpin(1), params.sepSpin);
 
-% ---------- Post-Sham phase -----------
+% ---------- Sham phase -----------
 [subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Sham] = ...
-    f_get_frPeak(data_postSham, params, params.edgesSpin(1), params.sepSpin);
+    f_get_frPeak(data_Sham, params, params.edgesSpin(1), params.sepSpin);
 
 
-%% ------ For fast Spindle range -----
+%% ---- For fast Spindle range ---
 
-% ---------- Post-Odor phase ----------
+% ---------- Odor phase ----------
 [subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Odor] = ...
-    f_get_frPeak(data_postOdor, params, params.sepSpin, params.edgesSpin(2));
+    f_get_frPeak(data_Odor, params, params.sepSpin, params.edgesSpin(2));
 
-% ---------- Post-Sham phase -----------
+% ---------- Sham phase ----------
 [subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Sham] = ...
-    f_get_frPeak(data_postSham, params, params.sepSpin, params.edgesSpin(2));
+    f_get_frPeak(data_Sham, params, params.sepSpin, params.edgesSpin(2));
 
 
 % for t = 1:size(offS,2)

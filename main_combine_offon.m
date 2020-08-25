@@ -16,7 +16,7 @@ end
 
 
 %% Select which areas to compare
-run('/home/sleep/Documents/DAVID/GitHub/EEG_channels/p_generic_channels.m')
+run('D:\Gits\EEG_channels\p_generic_channels.m')
 
 
 %% Loading Odor sets into memory
@@ -89,7 +89,8 @@ for Load2Mem = 1:numel(FilesListSham)
         Data_SS_Sham = subjectPSD.(str_subj).Sham.Data(s_SS,:,:);
         Data_SS_Odor = subjectPSD.(str_subj).Odor.Data(s_SS,:,:);
         
-        Data_SS = [Data_SS_Sham, Data_SS_Odor];
+        Data_SS_Sham = squeeze(Data_SS_Sham);
+        Data_SS_Odor = squeeze(Data_SS_Odor);
         
         % Get the peak in PSD of spindle frequency range (7 to 16 Hz)
         run extractFrPeak_combined.m
