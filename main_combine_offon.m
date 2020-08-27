@@ -62,25 +62,25 @@ for Load2Mem = 1:numel(FilesListSham)
     
     clear tmp_data
     
-    if size(subjectPSD.(str_subj).Sham.Data, 3) > ...
-            size(subjectPSD.(str_subj).Odor.Data, 3)
-        
-        subjectPSD.(str_subj).Sham.Data = ...
-            subjectPSD.(str_subj).Sham.Data(:,:, ...
-            1:size(subjectPSD.(str_subj).Odor.Data,3));
-        
-        warning('Removed Sham trials')
-        
-    elseif size(subjectPSD.(str_subj).Sham.Data, 3) < ...
-            size(subjectPSD.(str_subj).Odor.Data, 3)
-        
-        subjectPSD.(str_subj).Odor.Data = ...
-            subjectPSD.(str_subj).Odor.Data(:,:, ...
-            1:size(subjectPSD.(str_subj).Sham.Data,3));
-        
-        warning('Removed Odor trials')
-        
-    end
+%     if size(subjectPSD.(str_subj).Sham.Data, 3) > ...
+%             size(subjectPSD.(str_subj).Odor.Data, 3)
+%         
+%         subjectPSD.(str_subj).Sham.Data = ...
+%             subjectPSD.(str_subj).Sham.Data(:,:, ...
+%             1:size(subjectPSD.(str_subj).Odor.Data,3));
+%         
+%         warning('Removed Sham trials')
+%         
+%     elseif size(subjectPSD.(str_subj).Sham.Data, 3) < ...
+%             size(subjectPSD.(str_subj).Odor.Data, 3)
+%         
+%         subjectPSD.(str_subj).Odor.Data = ...
+%             subjectPSD.(str_subj).Odor.Data(:,:, ...
+%             1:size(subjectPSD.(str_subj).Sham.Data,3));
+%         
+%         warning('Removed Odor trials')
+%         
+%     end
     
     for s_SS = 1:numel(ROIs.str_chans)
         

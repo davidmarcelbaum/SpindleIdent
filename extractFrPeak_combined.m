@@ -35,22 +35,22 @@ end
 %% --- For slow Spindle range ---
 
 % ---------- Odor phase ---------
-[subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Odor] = ...
+[subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Odor] = ...
     f_get_frPeak(data_Odor, params, params.edgesSpin(1), params.sepSpin);
 
 % ---------- Sham phase -----------
-[subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Sham] = ...
+[subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Sham] = ...
     f_get_frPeak(data_Sham, params, params.edgesSpin(1), params.sepSpin);
 
 
 %% ---- For fast Spindle range ---
 
 % ---------- Odor phase ----------
-[subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Odor] = ...
+[subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Odor] = ...
     f_get_frPeak(data_Odor, params, params.sepSpin, params.edgesSpin(2));
 
 % ---------- Sham phase ----------
-[subjectPSD.(str_subj).(str_SS).MaxSlowSpindle_Sham] = ...
+[subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Sham] = ...
     f_get_frPeak(data_Sham, params, params.sepSpin, params.edgesSpin(2));
 
 
