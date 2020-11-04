@@ -1,11 +1,11 @@
-params.fpass    = [1 35];
-params.Fs       = subjectPSD.Srate;
-params.tapers   = [5 9];
-params.trialave = 0;
-params.err      = 0;
+params.fpass        = [1 35];
+params.Fs           = subjectPSD.Srate;
+params.tapers       = [5 9];
+params.trialave     = 0;
+params.err          = 0;
 
-params.edgesSpin = [7, 16];
-params.sepSpin = 11;
+params.edgesSpin    = [7, 16];
+params.sepSpin      = 12;
 
 
 if strcmp(str_triggers, 'switchedOFF_switchedON')
@@ -52,15 +52,3 @@ end
 % ---------- Sham phase ----------
 [subjectPSD.(str_subj).(str_SS).MaxFastSpindle_Sham] = ...
     f_get_frPeak(data_Sham, params, params.sepSpin, params.edgesSpin(2));
-
-
-% for t = 1:size(offS,2)
-%     
-%     hold on;
-%     plot(offFreq,pow2db(offS(:,t)), 'LineWidth', 0.5, 'Color', 'b'); hold on;
-%     plot(onFreq,pow2db(onS(:,t)), 'LineWidth', 0.5, 'Color', 'r');
-%     xlabel('frequency (Hz)');
-%     ylabel('power (dB)');
-%     legend({'odor off', 'odor on'})
-%     
-% end

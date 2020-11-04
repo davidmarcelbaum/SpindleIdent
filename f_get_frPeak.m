@@ -1,6 +1,6 @@
 function [maxpeakLoc] = f_get_frPeak(data_vector, params, highPassFr, lowPassFr)
 
-[OdorS,OdorFreq]    = mtspectrumc(data_vector, params); 
+[OdorS,OdorFreq]    = mtspectrumc(data_vector, params);
 
 % Get all frequency points in frequency range of interest
 highpass = OdorFreq(OdorFreq > highPassFr);
@@ -25,5 +25,16 @@ maxpeakVal = max(OdorS_span(peaks.loc));
 find_pos = find(OdorS == maxpeakVal);
 maxpeakLoc = OdorFreq(find_pos(1));
 
+% for t = 1:size(OdorS,2)
+%     
+%     hold on;
+%     plot(OdorFreq,pow2db(OdorS(:,t)), 'LineWidth', 0.5, 'Color', 'b');
+%     xlabel('frequency (Hz)');
+%     ylabel('power (dB)');
+%     legend({'odor on'})
+%     
+% end
+% hold off
+% close all
 
 end
